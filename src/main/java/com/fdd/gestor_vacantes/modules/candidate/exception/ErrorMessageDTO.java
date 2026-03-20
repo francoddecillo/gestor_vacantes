@@ -1,4 +1,4 @@
-package com.fdd.gestor_vacantes.exceptions;
+package com.fdd.gestor_vacantes.modules.candidate.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

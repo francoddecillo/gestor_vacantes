@@ -1,6 +1,4 @@
-package com.fdd.gestor_vacantes.entity;
-
-
+package com.fdd.gestor_vacantes.modules.candidate.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

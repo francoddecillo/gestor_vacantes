@@ -1,4 +1,4 @@
-package com.fdd.gestor_vacantes.modules.candidate.exceptions;
+package com.fdd.gestor_vacantes.modules.candidate.exception;
 
 public class UserFoundException extends RuntimeException{
     public UserFoundException(){

@@ -1,4 +1,4 @@
-package com.fdd.gestor_vacantes.exceptions;
+package com.fdd.gestor_vacantes.modules.candidate.exception;
 
 
 import org.springframework.context.MessageSource;
