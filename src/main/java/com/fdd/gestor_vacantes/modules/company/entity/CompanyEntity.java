@@ -24,14 +24,14 @@ public class CompanyEntity {
     private UUID id;
 
     @NotBlank
-    @Pattern(regexp = "\\S+", message = "El campo username no debe tener espacios")
+    @Pattern(regexp = "\\S+", message = " [username] no debe contener espacios")
     private String username;
 
-    @Length(min=10, max=100, message = "El campo password debe tener entre 10-100 caracteres")
-    private String password;
-
-    @Email(message = "El campo email tiene que contener un email válido")
+    @Email(message = " [email] debe ser un e-mail válido")
     private String email;
+
+    @Length(min = 10, max = 100, message = "Debe contener entre 10-100 caracteres")
+    private String password;
 
     private String website;
     private String name;
@@ -39,6 +39,4 @@ public class CompanyEntity {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-
 }

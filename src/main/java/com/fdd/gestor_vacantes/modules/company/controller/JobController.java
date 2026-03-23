@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/jobs")
+@RequestMapping("/job")
 public class JobController {
 
     @Autowired
     private CreateJobUseCase createJobUseCase;
 
     @PostMapping("/")
-    public JobEntity create(@Valid @RequestBody JobEntity jobEntity){
-        return this.createJobUseCase.execute(jobEntity);
+    public JobEntity create(@Valid @RequestBody JobEntity jobEntity) {
+        return createJobUseCase.execute(jobEntity);
     }
-
 }

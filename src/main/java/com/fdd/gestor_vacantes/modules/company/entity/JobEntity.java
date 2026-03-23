@@ -11,18 +11,19 @@ import java.util.UUID;
 @Entity(name = "job")
 @Data
 public class JobEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String description;
-    @NotBlank(message = "Campo obligatorio" )
-    private String level;
     private String benefits;
+
+    @NotBlank(message = "Este campo es obligatorio")
+    private String level;
 
     @ManyToOne()
     @JoinColumn(name = "company_id", insertable = false, updatable = false)
     private CompanyEntity companyEntity;
-
 
     @Column(name = "company_id", nullable = false)
     private UUID companyId;
