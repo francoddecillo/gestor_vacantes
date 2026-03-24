@@ -3,18 +3,19 @@ package com.fdd.gestor_vacantes.modules.company.useCase;
 import com.fdd.gestor_vacantes.modules.candidate.exception.UserFoundException;
 import com.fdd.gestor_vacantes.modules.company.entity.CompanyEntity;
 import com.fdd.gestor_vacantes.modules.company.repository.CompanyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreateCompanyUseCase {
 
-    @Autowired
-    private CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public CreateCompanyUseCase(CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
+        this.companyRepository = companyRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public CompanyEntity execute(CompanyEntity companyEntity) {
         this.companyRepository
