@@ -24,7 +24,7 @@ public class JobEntity {
     private String description;
     private String benefits;
 
-    @NotBlank(message = "Esse campo é obrigatório")
+    @NotBlank(message = "Este campo es obligatorio")
     private String level;
 
     @ManyToOne()
