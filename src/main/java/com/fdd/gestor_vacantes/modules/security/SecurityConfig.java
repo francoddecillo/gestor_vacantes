@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/candidate/", "/company/", "/auth/company").permitAll()
+                        .requestMatchers("/candidate/", "/company/", "/auth/company","/candidate/auth" ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
