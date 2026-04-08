@@ -2,6 +2,7 @@ package com.fdd.gestor_vacantes.modules.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,12 +11,15 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final SecurityFilter securityFilter;
+    private final SecurityCandidateFilter securityCandidateFilter;
 
-    public SecurityConfig(SecurityFilter securityFilter) {
+    public SecurityConfig(SecurityFilter securityFilter, SecurityCandidateFilter securityCandidateFilter) {
         this.securityFilter = securityFilter;
+        this.securityCandidateFilter = securityCandidateFilter;
     }
 
     @Bean
@@ -24,10 +28,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/candidate/", "/company/", "/auth/company","/candidate/auth" ).permitAll()
+                        .requestMatchers("/candidate/", "/company/", "/company/auth","/candidate/auth" ).permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
                 .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
+
 
         return http.build();
     }

@@ -1,10 +1,11 @@
 package com.fdd.gestor_vacantes.modules.security;
 
-import com.fdd.gestor_vacantes.modules.providers.JWTProvider;
+import com.fdd.gestor_vacantes.modules.providers.JWTCandidateProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,36 +15,34 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 
-
 @Component
-public class SecurityFilter extends OncePerRequestFilter {
+public class SecurityCandidateFilter extends OncePerRequestFilter {
 
-    private final JWTProvider jwtProvider;
+    private final JWTCandidateProvider jwtCandidateProvider;
 
-    public SecurityFilter(JWTProvider jwtProvider) {
-        this.jwtProvider = jwtProvider;
+    public SecurityCandidateFilter(JWTCandidateProvider jwtCandidateProvider) {
+        this.jwtCandidateProvider = jwtCandidateProvider;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
 //        SecurityContextHolder.getContext().setAuthentication(null);
-        String authHeader = request.getHeader("Authorization");
+        String header = request.getHeader("Authorization");
 
-        if(request.getRequestURI().startsWith("/company")) {
+        if(request.getRequestURI().startsWith("/candidate")) {
 
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                String header = authHeader.substring(7);
-                var token = this.jwtProvider.validateToken(header);
-
+            if (header != null) {
+                var token = this.jwtCandidateProvider.validateToken(header);
                 if (token == null) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
-                var roles = token.getClaim("roles").asList(Object.class);
-                var grants = roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase())).toList();
-                request.setAttribute("company_id", token.getSubject());
+                request.setAttribute("candidate_id", token.getSubject());
+                var roles =  token.getClaim("roles").asList(Object.class);
+                var grants = roles.stream().map(
+                        role -> new SimpleGrantedAuthority("ROLE_"+role.toString().toUpperCase())
+                ).toList();
 
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(token.getSubject(), null, grants);
@@ -51,7 +50,6 @@ public class SecurityFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
-
         filterChain.doFilter(request, response);
     }
 }

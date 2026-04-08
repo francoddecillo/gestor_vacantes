@@ -1,7 +1,7 @@
 package com.fdd.gestor_vacantes.modules.company.controller;
 
 
-import com.fdd.gestor_vacantes.modules.company.dto.AuthCompanyDTO;
+import com.fdd.gestor_vacantes.modules.company.dto.AuthCompanyRequestDTO;
 import com.fdd.gestor_vacantes.modules.company.useCase.AuthCompanyUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/company")
 public class AuthCompanyController {
 
     private final AuthCompanyUseCase authCompanyUseCase;
@@ -20,10 +20,10 @@ public class AuthCompanyController {
         this.authCompanyUseCase = authCompanyUseCase;
     }
 
-    @PostMapping("/company")
-    public ResponseEntity<Object> create(@RequestBody AuthCompanyDTO authCompanyDTO) {
+    @PostMapping("/auth")
+    public ResponseEntity<Object> create(@RequestBody AuthCompanyRequestDTO authCompanyRequestDTO) {
         try {
-            var result = authCompanyUseCase.execute(authCompanyDTO);
+            var result = authCompanyUseCase.execute(authCompanyRequestDTO);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
