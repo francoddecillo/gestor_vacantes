@@ -1,6 +1,6 @@
 package com.fdd.gestor_vacantes.modules.company.useCase;
 
-import com.fdd.gestor_vacantes.modules.candidate.exception.UserFoundException;
+import com.fdd.gestor_vacantes.modules.exception.UserFoundException;
 import com.fdd.gestor_vacantes.modules.company.entity.CompanyEntity;
 import com.fdd.gestor_vacantes.modules.company.repository.CompanyRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;

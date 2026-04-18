@@ -1,9 +1,8 @@
 package com.fdd.gestor_vacantes.modules.candidate.useCase;
 
 import com.fdd.gestor_vacantes.modules.candidate.entity.CandidateEntity;
-import com.fdd.gestor_vacantes.modules.candidate.exception.UserFoundException;
+import com.fdd.gestor_vacantes.modules.exception.UserFoundException;
 import com.fdd.gestor_vacantes.modules.candidate.repository.CandidateRepository;
-import com.fdd.gestor_vacantes.modules.company.repository.CompanyRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 @Service

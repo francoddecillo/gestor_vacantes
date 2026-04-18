@@ -1,7 +1,7 @@
-package com.fdd.gestor_vacantes.modules.candidate.exception;
+package com.fdd.gestor_vacantes.modules.exception;
 
 public class UserFoundException extends RuntimeException{
     public UserFoundException(){
-        super("Usuario existe");
+        super("User already exists");
     }
 }

@@ -3,7 +3,6 @@ package com.fdd.gestor_vacantes.modules.candidate.controller;
 
 import com.fdd.gestor_vacantes.modules.candidate.dto.AuthCandidateRequestDTO;
 import com.fdd.gestor_vacantes.modules.candidate.useCase.AuthCandidateUseCase;
-import com.fdd.gestor_vacantes.modules.company.useCase.AuthCompanyUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
