@@ -1,6 +1,7 @@
 package com.fdd.gestor_vacantes.modules.candidate.useCase;
 
 
+import com.fdd.gestor_vacantes.modules.candidate.entity.ApplyJobEntity;
 import com.fdd.gestor_vacantes.modules.candidate.repository.ApplyJobRepository;
 import com.fdd.gestor_vacantes.modules.exception.JobNotFoundException;
 import com.fdd.gestor_vacantes.modules.exception.UserNotFoundException;
@@ -23,9 +24,11 @@ public class ApplyJobCandidateUseCase {
 
     }
 
-    public void execute(UUID idCandidate, UUID idJob){
+    public ApplyJobEntity execute(UUID idCandidate, UUID idJob){
         this.candidateRepository.findById(idCandidate).orElseThrow(() ->{ throw new UserNotFoundException();});
         this.jobRepository.findById(idJob).orElseThrow(() ->{ throw new JobNotFoundException();});
-        
+        var applyJob = ApplyJobEntity.builder().candidateId(idCandidate).jobId(idJob).build();
+        applyJob = applyJobRepository.save(applyJob);
+        return applyJob;
     }
 }
