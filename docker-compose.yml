@@ -5,6 +5,6 @@ services:
     ports:
       - "5433:5432"
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: gestion_vacantes
+      POSTGRES_USER: ${DDB_USER}
+      POSTGRES_PASSWORD: ${DDB_PASSWORD}
+      POSTGRES_DB: ${DDB_NAME}

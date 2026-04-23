@@ -4,15 +4,12 @@ package com.fdd.gestor_vacantes.modules.company.controller;
 import com.fdd.gestor_vacantes.modules.company.dto.CreateJobDTO;
 import com.fdd.gestor_vacantes.modules.company.entity.JobEntity;
 import com.fdd.gestor_vacantes.modules.company.useCase.CreateJobUseCase;
+import com.fdd.gestor_vacantes.modules.company.useCase.ListAllJobsByCompanyUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.UUID;
@@ -22,9 +19,11 @@ public class JobController {
 
 
     private final CreateJobUseCase createJobUseCase;
+    private final ListAllJobsByCompanyUseCase listAllJobsByCompanyUseCase;
 
-    public JobController(CreateJobUseCase createJobUseCase) {
+    public JobController(CreateJobUseCase createJobUseCase, ListAllJobsByCompanyUseCase listAllJobsByCompanyUseCase) {
         this.createJobUseCase = createJobUseCase;
+        this.listAllJobsByCompanyUseCase = listAllJobsByCompanyUseCase;
     }
 
     @PostMapping("/")
@@ -45,6 +44,14 @@ public class JobController {
         }catch(Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/")
+    @PreAuthorize("hasRole('COMPANY')")
+    public ResponseEntity<Object> listByCompany(HttpServletRequest request){
+        var companyId = request.getAttribute("company_id");
+        var result = this.listAllJobsByCompanyUseCase.execute(UUID.fromString(companyId.toString()));
+        return ResponseEntity.ok().body(result);
     }
 
 }

@@ -3,7 +3,7 @@ package com.fdd.gestor_vacantes.modules.candidate.useCase;
 
 import com.fdd.gestor_vacantes.modules.candidate.dto.ProfileCandidateResponseDTO;
 import com.fdd.gestor_vacantes.modules.candidate.repository.CandidateRepository;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import com.fdd.gestor_vacantes.modules.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -20,7 +20,7 @@ public class ProfileCandidateUseCase {
 
     public ProfileCandidateResponseDTO execute(UUID idCandidate) {
         var candidate = this.candidateRepository.findById(idCandidate).orElseThrow(() -> {
-            throw new UsernameNotFoundException("User not found");
+            throw new UserNotFoundException();
         });
 
         var candidateDTO = ProfileCandidateResponseDTO.builder()

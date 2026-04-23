@@ -5,7 +5,9 @@ import com.fdd.gestor_vacantes.modules.candidate.entity.CandidateEntity;
 
 import com.fdd.gestor_vacantes.modules.candidate.useCase.ApplyJobCandidateUseCase;
 import com.fdd.gestor_vacantes.modules.candidate.useCase.CreateCandidateUseCase;
+import com.fdd.gestor_vacantes.modules.candidate.useCase.ListAllJobsByFilterUseCase;
 import com.fdd.gestor_vacantes.modules.candidate.useCase.ProfileCandidateUseCase;
+import com.fdd.gestor_vacantes.modules.company.entity.JobEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,11 +25,13 @@ public class CandidateController {
     private final CreateCandidateUseCase createCandidateUseCase;
     private final ProfileCandidateUseCase profileCandidateUseCase;
     private final ApplyJobCandidateUseCase applyJobCandidateUseCase;
+    private final ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
 
-    public CandidateController(CreateCandidateUseCase createCandidateUseCase, ProfileCandidateUseCase profileCandidateUseCase, ApplyJobCandidateUseCase applyJobCandidateUseCase) {
+    public CandidateController(CreateCandidateUseCase createCandidateUseCase, ProfileCandidateUseCase profileCandidateUseCase, ApplyJobCandidateUseCase applyJobCandidateUseCase, ListAllJobsByFilterUseCase listAllJobsByFilterUseCase) {
         this.createCandidateUseCase = createCandidateUseCase;
         this.profileCandidateUseCase = profileCandidateUseCase;
         this.applyJobCandidateUseCase = applyJobCandidateUseCase;
+        this.listAllJobsByFilterUseCase = listAllJobsByFilterUseCase;
     }
 
     @PostMapping("/")
@@ -51,6 +56,14 @@ public class CandidateController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/job")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    public List<JobEntity> findJobByFilter(@RequestParam String filter) {
+        return this.listAllJobsByFilterUseCase.execute(filter);
+    }
+
+
 
     @PostMapping("/job/apply")
     @PreAuthorize("hasRole('CANDIDATE')")

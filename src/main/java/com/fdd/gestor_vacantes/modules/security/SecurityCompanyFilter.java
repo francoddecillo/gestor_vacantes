@@ -1,6 +1,6 @@
 package com.fdd.gestor_vacantes.modules.security;
 
-import com.fdd.gestor_vacantes.modules.providers.JWTCandidateProvider;
+import com.fdd.gestor_vacantes.modules.providers.JWTProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,32 +14,34 @@ import java.io.IOException;
 
 
 @Component
-public class SecurityCandidateFilter extends OncePerRequestFilter {
+public class
+SecurityCompanyFilter extends OncePerRequestFilter {
 
-    private final JWTCandidateProvider jwtCandidateProvider;
+    private final JWTProvider jwtProvider;
 
-    public SecurityCandidateFilter(JWTCandidateProvider jwtCandidateProvider) {
-        this.jwtCandidateProvider = jwtCandidateProvider;
+    public SecurityCompanyFilter(JWTProvider jwtProvider) {
+        this.jwtProvider = jwtProvider;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String header = request.getHeader("Authorization");
 
-        if(request.getRequestURI().startsWith("/candidate")) {
+        String authHeader = request.getHeader("Authorization");
 
-            if (header != null) {
-                var token = this.jwtCandidateProvider.validateToken(header);
+        if(request.getRequestURI().startsWith("/company")) {
+
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                String header = authHeader.substring(7);
+                var token = this.jwtProvider.validateToken(header);
+
                 if (token == null) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
-                request.setAttribute("candidate_id", token.getSubject());
-                var roles =  token.getClaim("roles").asList(Object.class);
-                var grants = roles.stream().map(
-                        role -> new SimpleGrantedAuthority("ROLE_"+role.toString().toUpperCase())
-                ).toList();
+                var roles = token.getClaim("roles").asList(Object.class);
+                var grants = roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase())).toList();
+                request.setAttribute("company_id", token.getSubject());
 
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(token.getSubject(), null, grants);
@@ -47,6 +49,7 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }
